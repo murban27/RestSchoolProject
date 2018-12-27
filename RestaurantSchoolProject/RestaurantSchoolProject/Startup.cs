@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 namespace RestaurantSchoolProject
 {
     public class Startup
-    {
+    {//Set
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;

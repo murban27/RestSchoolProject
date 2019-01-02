@@ -17,6 +17,8 @@ namespace RestaurantSchoolProject
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            //SET//SET
+            ///SS
         }
 
         public IConfiguration Configuration { get; }

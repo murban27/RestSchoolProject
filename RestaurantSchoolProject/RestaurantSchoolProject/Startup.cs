@@ -17,8 +17,10 @@ namespace RestaurantSchoolProject
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            //SET//SET
+            //SETfsafasfs
+
             ///SS
+
         }
 
         public IConfiguration Configuration { get; }
@@ -38,6 +40,11 @@ namespace RestaurantSchoolProject
             }
 
             app.UseMvc();
+        }
+
+        public void Shit()
+        {
+            //
         }
     }
 }

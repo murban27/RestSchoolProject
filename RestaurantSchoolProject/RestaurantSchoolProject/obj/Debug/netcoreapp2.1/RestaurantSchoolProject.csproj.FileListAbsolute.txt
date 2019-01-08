@@ -1,0 +1,14 @@
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\bin\Debug\netcoreapp2.1\RestaurantSchoolProject.deps.json
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\bin\Debug\netcoreapp2.1\RestaurantSchoolProject.runtimeconfig.json
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\bin\Debug\netcoreapp2.1\RestaurantSchoolProject.runtimeconfig.dev.json
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\bin\Debug\netcoreapp2.1\RestaurantSchoolProject.dll
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\obj\Debug\netcoreapp2.1\RestaurantSchoolProject.csproj.CoreCompileInputs.cache
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\obj\Debug\netcoreapp2.1\RestaurantSchoolProject.RazorAssemblyInfo.cache
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\obj\Debug\netcoreapp2.1\RestaurantSchoolProject.RazorAssemblyInfo.cs
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\obj\Debug\netcoreapp2.1\RestaurantSchoolProject.AssemblyInfoInputs.cache
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\obj\Debug\netcoreapp2.1\RestaurantSchoolProject.AssemblyInfo.cs
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\obj\Debug\netcoreapp2.1\RestaurantSchoolProject.RazorTargetAssemblyInfo.cache
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\bin\Debug\netcoreapp2.1\RestaurantSchoolProject.pdb
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\obj\Debug\netcoreapp2.1\RestaurantSchoolProject.dll
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\obj\Debug\netcoreapp2.1\RestaurantSchoolProject.pdb
+F:\Michal\Škola\GITRestaurant\RestaurantSchoolProject\RestaurantSchoolProject\obj\Debug\netcoreapp2.1\RestaurantSchoolProject.csprojAssemblyReference.cache

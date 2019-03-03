@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RestaurantSchoolProject.Controllers
@@ -12,6 +13,7 @@ namespace RestaurantSchoolProject.Controllers
     {
         // GET api/values
         [HttpGet]
+        [Authorize(Roles ="1")]
         public ActionResult<IEnumerable<string>> Get()
         {
             return new string[] { "value1", "value2" };

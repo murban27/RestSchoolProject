@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +14,24 @@ namespace RestaurantSchoolProject.Controllers
     [ApiController]
     public class LoginsController : ControllerBase
     {
-        private readonly RestaurantContext _context;
-
-        public LoginsController(RestaurantContext context)
+        private IUserService _userService;
+        private RestaurantContext _context;
+        public LoginsController(IUserService userService)
         {
+            _userService = userService;
+            RestaurantContext context=new RestaurantContext();
             _context = context;
+        }
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody]Login userParam)
+        {
+            var user = await _userService.Authenticate(userParam.Login1, userParam.Heslo);
+
+            if (user == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            return Ok(user);
         }
 
         // GET: api/Logins
@@ -82,7 +96,7 @@ namespace RestaurantSchoolProject.Controllers
         }
 
         // POST: api/Logins
-        [HttpPost]
+        /*[HttpPost]
         public async Task<IActionResult> PostLogin([FromBody] Login login)
         {
             if (!ModelState.IsValid)
@@ -94,7 +108,7 @@ namespace RestaurantSchoolProject.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetLogin", new { id = login.Id }, login);
-        }
+        }*/
 
         // DELETE: api/Logins/5
         [HttpDelete("{id}")]

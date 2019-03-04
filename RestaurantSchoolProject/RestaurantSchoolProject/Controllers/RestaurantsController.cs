@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RestaurantSchoolProject.Models;
 
 namespace RestaurantSchoolProject.Controllers
 {
-    public class RestaurantsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class RestaurantsController : ControllerBase
     {
         private readonly RestaurantContext _context;
 
@@ -18,130 +20,115 @@ namespace RestaurantSchoolProject.Controllers
             _context = context;
         }
 
-        // GET: Restaurants
-        public async Task<IActionResult> Index()
+        // GET: api/Restaurants
+        [HttpGet]
+        public IEnumerable<Restaurant> GetRestaurant()
         {
-            return View(await _context.Restaurant.ToListAsync());
+            return _context.Restaurant;
         }
 
-        // GET: Restaurants/Details/5
-        public async Task<IActionResult> Details(string id)
+        // GET: api/Restaurants/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRestaurant([FromRoute] string id)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
-            }
-
-            var restaurant = await _context.Restaurant
-                .FirstOrDefaultAsync(m => m.Nazev == id);
-            if (restaurant == null)
-            {
-                return NotFound();
-            }
-
-            return View(restaurant);
-        }
-
-        // GET: Restaurants/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Restaurants/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nazev,Od,Do")] Restaurant restaurant)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(restaurant);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(restaurant);
-        }
-
-        // GET: Restaurants/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
             var restaurant = await _context.Restaurant.FindAsync(id);
+
             if (restaurant == null)
             {
                 return NotFound();
             }
-            return View(restaurant);
+
+            return Ok(restaurant);
         }
 
-        // POST: Restaurants/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Nazev,Od,Do")] Restaurant restaurant)
+        // PUT: api/Restaurants/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutRestaurant([FromRoute] string id, [FromBody] Restaurant restaurant)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != restaurant.Nazev)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(restaurant).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(restaurant);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RestaurantExists(restaurant.Nazev))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(restaurant);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RestaurantExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: Restaurants/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        // POST: api/Restaurants
+        [HttpPost]
+        public async Task<IActionResult> PostRestaurant([FromBody] Restaurant restaurant)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
-            var restaurant = await _context.Restaurant
-                .FirstOrDefaultAsync(m => m.Nazev == id);
+            _context.Restaurant.Add(restaurant);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (RestaurantExists(restaurant.Nazev))
+                {
+                    return new StatusCodeResult(StatusCodes.Status409Conflict);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetRestaurant", new { id = restaurant.Nazev }, restaurant);
+        }
+
+        // DELETE: api/Restaurants/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRestaurant([FromRoute] string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var restaurant = await _context.Restaurant.FindAsync(id);
             if (restaurant == null)
             {
                 return NotFound();
             }
 
-            return View(restaurant);
-        }
-
-        // POST: Restaurants/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var restaurant = await _context.Restaurant.FindAsync(id);
             _context.Restaurant.Remove(restaurant);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Ok(restaurant);
         }
 
         private bool RestaurantExists(string id)

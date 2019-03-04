@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RestaurantSchoolProject.Models;
 
 namespace RestaurantSchoolProject.Controllers
 {
-    public class DenZakObjednavkasController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
+    public class DenZakObjednavkasController : ControllerBase
     {
         private readonly RestaurantContext _context;
 
@@ -18,143 +22,102 @@ namespace RestaurantSchoolProject.Controllers
             _context = context;
         }
 
-        // GET: DenZakObjednavkas
-        public async Task<IActionResult> Index()
+        // GET: api/DenZakObjednavkas
+        [HttpGet]
+
+        public IEnumerable<DenZakObjednavka> GetDenZakObjednavka()
         {
-            var restaurantContext = _context.DenZakObjednavka.Include(d => d.Status).Include(d => d.Table);
-            return View(await restaurantContext.ToListAsync());
+            return _context.DenZakObjednavka;
         }
 
-        // GET: DenZakObjednavkas/Details/5
-        public async Task<IActionResult> Details(long? id)
+        // GET: api/DenZakObjednavkas/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetDenZakObjednavka([FromRoute] long id)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
-            }
-
-            var denZakObjednavka = await _context.DenZakObjednavka
-                .Include(d => d.Status)
-                .Include(d => d.Table)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (denZakObjednavka == null)
-            {
-                return NotFound();
-            }
-
-            return View(denZakObjednavka);
-        }
-
-        // GET: DenZakObjednavkas/Create
-        public IActionResult Create()
-        {
-            ViewData["StatusId"] = new SelectList(_context.StatusZpravy, "Id", "Id");
-            ViewData["TableId"] = new SelectList(_context.Table, "Id", "Id");
-            return View();
-        }
-
-        // POST: DenZakObjednavkas/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DatumObj,TableId,StatusId,Eet")] DenZakObjednavka denZakObjednavka)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(denZakObjednavka);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["StatusId"] = new SelectList(_context.StatusZpravy, "Id", "Id", denZakObjednavka.StatusId);
-            ViewData["TableId"] = new SelectList(_context.Table, "Id", "Id", denZakObjednavka.TableId);
-            return View(denZakObjednavka);
-        }
-
-        // GET: DenZakObjednavkas/Edit/5
-        public async Task<IActionResult> Edit(long? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
             var denZakObjednavka = await _context.DenZakObjednavka.FindAsync(id);
+
             if (denZakObjednavka == null)
             {
                 return NotFound();
             }
-            ViewData["StatusId"] = new SelectList(_context.StatusZpravy, "Id", "Id", denZakObjednavka.StatusId);
-            ViewData["TableId"] = new SelectList(_context.Table, "Id", "Id", denZakObjednavka.TableId);
-            return View(denZakObjednavka);
+
+            return Ok(denZakObjednavka);
         }
 
-        // POST: DenZakObjednavkas/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,DatumObj,TableId,StatusId,Eet")] DenZakObjednavka denZakObjednavka)
+        // PUT: api/DenZakObjednavkas/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutDenZakObjednavka([FromRoute] long id, [FromBody] DenZakObjednavka denZakObjednavka)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != denZakObjednavka.Id)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(denZakObjednavka).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(denZakObjednavka);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DenZakObjednavkaExists(denZakObjednavka.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            ViewData["StatusId"] = new SelectList(_context.StatusZpravy, "Id", "Id", denZakObjednavka.StatusId);
-            ViewData["TableId"] = new SelectList(_context.Table, "Id", "Id", denZakObjednavka.TableId);
-            return View(denZakObjednavka);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DenZakObjednavkaExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: DenZakObjednavkas/Delete/5
-        public async Task<IActionResult> Delete(long? id)
+        // POST: api/DenZakObjednavkas
+        [HttpPost]
+        public async Task<IActionResult> PostDenZakObjednavka([FromBody] DenZakObjednavka denZakObjednavka)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
-            var denZakObjednavka = await _context.DenZakObjednavka
-                .Include(d => d.Status)
-                .Include(d => d.Table)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            _context.DenZakObjednavka.Add(denZakObjednavka);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetDenZakObjednavka", new { id = denZakObjednavka.Id }, denZakObjednavka);
+        }
+
+        // DELETE: api/DenZakObjednavkas/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteDenZakObjednavka([FromRoute] long id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var denZakObjednavka = await _context.DenZakObjednavka.FindAsync(id);
             if (denZakObjednavka == null)
             {
                 return NotFound();
             }
 
-            return View(denZakObjednavka);
-        }
-
-        // POST: DenZakObjednavkas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
-        {
-            var denZakObjednavka = await _context.DenZakObjednavka.FindAsync(id);
             _context.DenZakObjednavka.Remove(denZakObjednavka);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Ok(denZakObjednavka);
         }
 
         private bool DenZakObjednavkaExists(long id)

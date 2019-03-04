@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RestaurantSchoolProject.Models;
 
 namespace RestaurantSchoolProject.Controllers
 {
-    public class KuchynsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    
+
+    public class KuchynsController : ControllerBase
     {
         private readonly RestaurantContext _context;
 
@@ -18,137 +23,101 @@ namespace RestaurantSchoolProject.Controllers
             _context = context;
         }
 
-        // GET: Kuchyns
-        public async Task<IActionResult> Index()
+        // GET: api/Kuchyns
+        [HttpGet]
+        public IEnumerable<Kuchyn> GetKuchyn()
         {
-            var restaurantContext = _context.Kuchyn.Include(k => k.Status);
-            return View(await restaurantContext.ToListAsync());
+            return _context.Kuchyn;
         }
 
-        // GET: Kuchyns/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/Kuchyns/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetKuchyn([FromRoute] int id)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
-            }
-
-            var kuchyn = await _context.Kuchyn
-                .Include(k => k.Status)
-                .FirstOrDefaultAsync(m => m.IdObjPol1 == id);
-            if (kuchyn == null)
-            {
-                return NotFound();
-            }
-
-            return View(kuchyn);
-        }
-
-        // GET: Kuchyns/Create
-        public IActionResult Create()
-        {
-            ViewData["StatusId"] = new SelectList(_context.StatusZpravy, "Id", "Id");
-            return View();
-        }
-
-        // POST: Kuchyns/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdObjPol1,StatusId")] Kuchyn kuchyn)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(kuchyn);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["StatusId"] = new SelectList(_context.StatusZpravy, "Id", "Id", kuchyn.StatusId);
-            return View(kuchyn);
-        }
-
-        // GET: Kuchyns/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
             var kuchyn = await _context.Kuchyn.FindAsync(id);
+
             if (kuchyn == null)
             {
                 return NotFound();
             }
-            ViewData["StatusId"] = new SelectList(_context.StatusZpravy, "Id", "Id", kuchyn.StatusId);
-            return View(kuchyn);
+
+            return Ok(kuchyn);
         }
 
-        // POST: Kuchyns/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdObjPol1,StatusId")] Kuchyn kuchyn)
+        // PUT: api/Kuchyns/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutKuchyn([FromRoute] int id, [FromBody] Kuchyn kuchyn)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != kuchyn.IdObjPol1)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(kuchyn).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(kuchyn);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!KuchynExists(kuchyn.IdObjPol1))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            ViewData["StatusId"] = new SelectList(_context.StatusZpravy, "Id", "Id", kuchyn.StatusId);
-            return View(kuchyn);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!KuchynExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: Kuchyns/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // POST: api/Kuchyns
+        [HttpPost]
+        public async Task<IActionResult> PostKuchyn([FromBody] Kuchyn kuchyn)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
-            var kuchyn = await _context.Kuchyn
-                .Include(k => k.Status)
-                .FirstOrDefaultAsync(m => m.IdObjPol1 == id);
+            _context.Kuchyn.Add(kuchyn);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetKuchyn", new { id = kuchyn.IdObjPol1 }, kuchyn);
+        }
+
+        // DELETE: api/Kuchyns/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteKuchyn([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var kuchyn = await _context.Kuchyn.FindAsync(id);
             if (kuchyn == null)
             {
                 return NotFound();
             }
 
-            return View(kuchyn);
-        }
-
-        // POST: Kuchyns/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var kuchyn = await _context.Kuchyn.FindAsync(id);
             _context.Kuchyn.Remove(kuchyn);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Ok(kuchyn);
         }
 
         private bool KuchynExists(int id)

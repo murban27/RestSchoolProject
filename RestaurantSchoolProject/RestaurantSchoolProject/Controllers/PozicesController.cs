@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RestaurantSchoolProject.Models;
 
 namespace RestaurantSchoolProject.Controllers
 {
-    public class PozicesController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
+    public class PozicesController : ControllerBase
     {
         private readonly RestaurantContext _context;
 
@@ -18,130 +22,101 @@ namespace RestaurantSchoolProject.Controllers
             _context = context;
         }
 
-        // GET: Pozices
-        public async Task<IActionResult> Index()
+        // GET: api/Pozices
+        [HttpGet]
+        public IEnumerable<Pozice> GetPozice()
         {
-            return View(await _context.Pozice.ToListAsync());
+            return _context.Pozice;
         }
 
-        // GET: Pozices/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/Pozices/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPozice([FromRoute] int id)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
-            }
-
-            var pozice = await _context.Pozice
-                .FirstOrDefaultAsync(m => m.PoziceId == id);
-            if (pozice == null)
-            {
-                return NotFound();
-            }
-
-            return View(pozice);
-        }
-
-        // GET: Pozices/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Pozices/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PoziceId,PopisPozice")] Pozice pozice)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(pozice);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(pozice);
-        }
-
-        // GET: Pozices/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
             var pozice = await _context.Pozice.FindAsync(id);
+
             if (pozice == null)
             {
                 return NotFound();
             }
-            return View(pozice);
+
+            return Ok(pozice);
         }
 
-        // POST: Pozices/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PoziceId,PopisPozice")] Pozice pozice)
+        // PUT: api/Pozices/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPozice([FromRoute] int id, [FromBody] Pozice pozice)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != pozice.PoziceId)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(pozice).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(pozice);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PoziceExists(pozice.PoziceId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(pozice);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PoziceExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: Pozices/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // POST: api/Pozices
+        [HttpPost]
+        public async Task<IActionResult> PostPozice([FromBody] Pozice pozice)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
-            var pozice = await _context.Pozice
-                .FirstOrDefaultAsync(m => m.PoziceId == id);
+            _context.Pozice.Add(pozice);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetPozice", new { id = pozice.PoziceId }, pozice);
+        }
+
+        // DELETE: api/Pozices/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePozice([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var pozice = await _context.Pozice.FindAsync(id);
             if (pozice == null)
             {
                 return NotFound();
             }
 
-            return View(pozice);
-        }
-
-        // POST: Pozices/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var pozice = await _context.Pozice.FindAsync(id);
             _context.Pozice.Remove(pozice);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Ok(pozice);
         }
 
         private bool PoziceExists(int id)

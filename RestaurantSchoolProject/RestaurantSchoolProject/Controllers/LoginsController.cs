@@ -36,6 +36,7 @@ namespace RestaurantSchoolProject.Controllers
 
         // GET: api/Logins
         [HttpGet]
+        [Authorize(Roles = "0")]
         public IEnumerable<Login> GetLogin()
         {
             return _context.Login;

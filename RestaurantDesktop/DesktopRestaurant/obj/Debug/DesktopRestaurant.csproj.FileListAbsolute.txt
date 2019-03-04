@@ -1,0 +1,15 @@
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant.csprojAssemblyReference.cache
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\MainWindow.g.cs
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\App.g.cs
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant_MarkupCompile.cache
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant_MarkupCompile.lref
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\bin\Debug\DesktopRestaurant.exe.config
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\bin\Debug\DesktopRestaurant.exe
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\bin\Debug\DesktopRestaurant.pdb
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\MainWindow.baml
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant.g.resources
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant.Properties.Resources.resources
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant.csproj.GenerateResource.cache
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant.csproj.CoreCompileInputs.cache
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant.exe
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant.pdb

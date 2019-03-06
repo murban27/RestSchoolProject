@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DesktopRestaurant.OBJECTS;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace DesktopRestaurant.Client
 {
@@ -14,29 +16,44 @@ namespace DesktopRestaurant.Client
         private JsonSerializerSettings JsonSett;
         private StringContent stringContent;
         public Object objec;
-        private Values values;
+        private DenZakObj values;
+        private Tables table;
         public ApiCall()
         {
             JsonSett = JsonSettings();
-
-
+            /*   values = new DenZakObj();
+               table = new Tables();*/
+            values = new DenZakObj();
+            table = new Tables();
 
         }
 
-        public async Task<Object> GetMethodAsync(Object obj, string query)
+        public async Task<Object> GetMethodAsync(Object Obj, string query)
         {
-            if(obj.Equals(values))
+
+            
+
+            if (Obj.Equals(values))
             {
-                obj = new Values();
+                Obj = new DenZakObj();
+            }
+            if(Obj.GetType().ToString()==table.GetType().ToString())
+            {
+                Obj = new Tables();
             }
 
-            HttpResponseMessage httpResponseMessage = await Client.GetAsync(query);
+            HttpResponseMessage httpResponseMessage =  Client.GetAsync(query).Result;
+
+
             if (httpResponseMessage.IsSuccessStatusCode)
             {
-                var value = JsonConvert.DeserializeObject<Values>(httpResponseMessage.Content.ToString());
+
+
+              List<Tables> table=  JsonConvert.DeserializeObject<List<Tables>>(httpResponseMessage.Content.ReadAsStringAsync().Result);
+                return table;
             }
-            this.obj=
-            return value;
+            return null;
+        
         }
 
 
@@ -55,7 +72,7 @@ namespace DesktopRestaurant.Client
         {
 
             var readAsStringAsync = await httpContent.ReadAsStringAsync();
-
+          
             return readAsStringAsync;
         }
 

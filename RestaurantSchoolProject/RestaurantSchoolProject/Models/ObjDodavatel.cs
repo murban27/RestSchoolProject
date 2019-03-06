@@ -5,6 +5,11 @@ namespace RestaurantSchoolProject.Models
 {
     public partial class ObjDodavatel
     {
+        public ObjDodavatel()
+        {
+            ObjDetail = new HashSet<ObjDetail>();
+        }
+
         public int ObjId { get; set; }
         public DateTime? DatumObjednani { get; set; }
         public int? StatusId { get; set; }
@@ -12,5 +17,6 @@ namespace RestaurantSchoolProject.Models
 
         public Dodavatel Dodavatel { get; set; }
         public StatusZpravy Status { get; set; }
+        public ICollection<ObjDetail> ObjDetail { get; set; }
     }
 }

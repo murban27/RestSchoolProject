@@ -13,3 +13,7 @@ F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\Des
 F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant.csproj.CoreCompileInputs.cache
 F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant.exe
 F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant.pdb
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\bin\Debug\Newtonsoft.Json.dll
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\bin\Debug\Newtonsoft.Json.pdb
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\bin\Debug\Newtonsoft.Json.xml
+F:\Michal\Škola\GITRestaurant\RestaurantDesktop\DesktopRestaurant\obj\Debug\DesktopRestaurant.csproj.CopyComplete

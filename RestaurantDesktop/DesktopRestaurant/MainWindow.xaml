@@ -10,7 +10,7 @@
         <TextBlock Margin="55,14,0,0" Text="Uživatelské jméno" TextWrapping="Wrap" HorizontalAlignment="Left" Height="48" VerticalAlignment="Top" Width="195" FontSize="18"/>
         <TextBlock Margin="55,124,0,0" Text="Heslo" TextWrapping="Wrap" HorizontalAlignment="Left" Height="44" VerticalAlignment="Top" Width="152" FontSize="18" OpacityMask="Black"/>
         <TextBox Margin="257,6,33,0" Text="" TextWrapping="Wrap" MaxLines="1" MaxLength="50" FontSize="12" x:Name="txtUserName" TabIndex="0" Height="59" VerticalAlignment="Top" Background="Gray" />
-        <PasswordBox Margin="257,124,33,0" MaxLength="32" FontSize="12" x:Name="pbPassword" TabIndex="1" Height="59" VerticalAlignment="Top" Background="Gray" />
+        <PasswordBox Margin="257,124,33,0" MaxLength="32" FontSize="12" x:Name="txtPassword" TabIndex="1" Height="59" VerticalAlignment="Top" Background="Gray" />
         <Button Click="BtnLogin_Click" Margin="20,0,0,44" VerticalAlignment="Bottom" Height="96" Content="Přihlášení" Foreground="#FFFFFFFF" FontSize="18" IsDefault="True" x:Name="btnLogin" TabIndex="2" HorizontalAlignment="Left" Width="211">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">

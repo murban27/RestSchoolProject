@@ -16,9 +16,11 @@ namespace RestaurantSchoolProject.Models
         }
 
         public virtual DbSet<DenZakObjednavka> DenZakObjednavka { get; set; }
+        public virtual DbSet<DenZakObjednavkaDetail> DenZakObjednavkaDetail { get; set; }
         public virtual DbSet<Dodavatel> Dodavatel { get; set; }
         public virtual DbSet<Kuchyn> Kuchyn { get; set; }
         public virtual DbSet<Login> Login { get; set; }
+        public virtual DbSet<ObjDetail> ObjDetail { get; set; }
         public virtual DbSet<ObjDodavatel> ObjDodavatel { get; set; }
         public virtual DbSet<Polozka> Polozka { get; set; }
         public virtual DbSet<Pozice> Pozice { get; set; }
@@ -26,9 +28,6 @@ namespace RestaurantSchoolProject.Models
         public virtual DbSet<StatusZpravy> StatusZpravy { get; set; }
         public virtual DbSet<Table> Table { get; set; }
         public virtual DbSet<Tax> Tax { get; set; }
-
-        // Unable to generate entity type for table 'public.obj_detail'. Please see the warning messages.
-        // Unable to generate entity type for table 'public.den_zak_objednavka_detail'. Please see the warning messages.
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -70,6 +69,48 @@ namespace RestaurantSchoolProject.Models
                     .HasConstraintName("fk_obj_tab");
             });
 
+            modelBuilder.Entity<DenZakObjednavkaDetail>(entity =>
+            {
+                entity.HasKey(e => e.InternalId);
+
+                entity.ToTable("den_zak_objednavka_detail");
+
+                entity.Property(e => e.InternalId)
+                    .HasColumnName("internal_id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Cena)
+                    .HasColumnName("cena")
+                    .HasColumnType("numeric(5,1)");
+
+                entity.Property(e => e.FoodItem).HasColumnName("food_item");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.PolozkaId)
+                    .HasColumnName("polozka_id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.StatusId).HasColumnName("status_id");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithMany(p => p.DenZakObjednavkaDetail)
+                    .HasForeignKey(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_reference_3");
+
+                entity.HasOne(d => d.Polozka)
+                    .WithMany(p => p.DenZakObjednavkaDetail)
+                    .HasForeignKey(d => d.PolozkaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_reference_17");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.DenZakObjednavkaDetail)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("fk_reference_6");
+            });
+
             modelBuilder.Entity<Dodavatel>(entity =>
             {
                 entity.ToTable("dodavatel");
@@ -87,13 +128,20 @@ namespace RestaurantSchoolProject.Models
 
             modelBuilder.Entity<Kuchyn>(entity =>
             {
-                entity.HasKey(e => e.IdObjPol1);
+                entity.HasKey(e => e.InternalId);
 
                 entity.ToTable("kuchyn");
 
-                entity.Property(e => e.IdObjPol1).HasColumnName("id_obj_pol_1");
+                entity.Property(e => e.InternalId).HasColumnName("internal_id");
+
+                entity.Property(e => e.DenZakObjednavkaDetailInternalId1).HasColumnName("den_zak_objednavka_detail_internal_id_1");
 
                 entity.Property(e => e.StatusId).HasColumnName("status_id");
+
+                entity.HasOne(d => d.DenZakObjednavkaDetailInternalId1Navigation)
+                    .WithMany(p => p.Kuchyn)
+                    .HasForeignKey(d => d.DenZakObjednavkaDetailInternalId1)
+                    .HasConstraintName("fk_reference_16");
 
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Kuchyn)
@@ -105,7 +153,9 @@ namespace RestaurantSchoolProject.Models
             {
                 entity.ToTable("LOGIN");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasDefaultValueSql("nextval('\"USER_id_seq\"'::regclass)");
 
                 entity.Property(e => e.Heslo)
                     .IsRequired()
@@ -142,6 +192,44 @@ namespace RestaurantSchoolProject.Models
                     .WithMany(p => p.Login)
                     .HasForeignKey(d => d.PoziceId)
                     .HasConstraintName("fk_pozion_ref");
+            });
+
+            modelBuilder.Entity<ObjDetail>(entity =>
+            {
+                entity.HasKey(e => e.InternalId);
+
+                entity.ToTable("obj_detail");
+
+                entity.Property(e => e.InternalId).HasColumnName("internal_id");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Mnozstvi)
+                    .HasColumnName("mnozstvi")
+                    .HasColumnType("numeric(4,1)");
+
+                entity.Property(e => e.NakupniCena)
+                    .HasColumnName("nakupni_cena")
+                    .HasColumnType("numeric(5,1)");
+
+                entity.Property(e => e.ObjId).HasColumnName("obj_id");
+
+                entity.Property(e => e.PolozkaId).HasColumnName("polozka_id");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithMany(p => p.ObjDetail)
+                    .HasForeignKey(d => d.Id)
+                    .HasConstraintName("fk_reference_14");
+
+                entity.HasOne(d => d.Obj)
+                    .WithMany(p => p.ObjDetail)
+                    .HasForeignKey(d => d.ObjId)
+                    .HasConstraintName("fk_reference_12");
+
+                entity.HasOne(d => d.Polozka)
+                    .WithMany(p => p.ObjDetail)
+                    .HasForeignKey(d => d.PolozkaId)
+                    .HasConstraintName("fk_reference_13");
             });
 
             modelBuilder.Entity<ObjDodavatel>(entity =>
@@ -182,6 +270,8 @@ namespace RestaurantSchoolProject.Models
                     .HasColumnType("numeric(5,1)");
 
                 entity.Property(e => e.Dodavatel).HasColumnName("dodavatel");
+
+                entity.Property(e => e.FoodItem).HasColumnName("food_item");
 
                 entity.Property(e => e.MernaHodnota)
                     .HasColumnName("merna_hodnota")
@@ -275,7 +365,7 @@ namespace RestaurantSchoolProject.Models
                     .HasColumnType("character varying(10)");
             });
 
-            modelBuilder.HasSequence("settings_seq");
+            modelBuilder.HasSequence("USER_id_seq");
         }
     }
 }

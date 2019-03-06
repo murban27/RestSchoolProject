@@ -66,7 +66,7 @@
     </Compile>
     <Compile Include="Client\ApiCall.cs" />
     <Compile Include="Client\InicializaceClient.cs" />
-    <Compile Include="Client\Values.cs" />
+    <Compile Include="Controller\DenZakObj.cs" />
     <Compile Include="Controller\GetMethod.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -74,6 +74,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OBJECTS\DenZakObjednavka.cs" />
+    <Compile Include="OBJECTS\Tables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

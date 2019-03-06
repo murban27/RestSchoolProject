@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,58 +11,56 @@ namespace RestaurantSchoolProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
-
-    public class KuchynsController : ControllerBase
+    public class ObjDetailsController : ControllerBase
     {
         private readonly RestaurantContext _context;
 
-        public KuchynsController(RestaurantContext context)
+        public ObjDetailsController(RestaurantContext context)
         {
             _context = context;
         }
 
-        // GET: api/Kuchyns
+        // GET: api/ObjDetails
         [HttpGet]
-        public IEnumerable<Kuchyn> GetKuchyn()
+        public IEnumerable<ObjDetail> GetObjDetail()
         {
-            return _context.Kuchyn;
+            return _context.ObjDetail;
         }
 
-        // GET: api/Kuchyns/5
+        // GET: api/ObjDetails/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetKuchyn([FromRoute] int id)
+        public async Task<IActionResult> GetObjDetail([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var kuchyn = await _context.Kuchyn.FindAsync(id);
+            var objDetail = await _context.ObjDetail.FindAsync(id);
 
-            if (kuchyn == null)
+            if (objDetail == null)
             {
                 return NotFound();
             }
 
-            return Ok(kuchyn);
+            return Ok(objDetail);
         }
 
-        // PUT: api/Kuchyns/5
+        // PUT: api/ObjDetails/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutKuchyn([FromRoute] int id, [FromBody] Kuchyn kuchyn)
+        public async Task<IActionResult> PutObjDetail([FromRoute] int id, [FromBody] ObjDetail objDetail)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != kuchyn.InternalId)
+            if (id != objDetail.InternalId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(kuchyn).State = EntityState.Modified;
+            _context.Entry(objDetail).State = EntityState.Modified;
 
             try
             {
@@ -71,7 +68,7 @@ namespace RestaurantSchoolProject.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!KuchynExists(id))
+                if (!ObjDetailExists(id))
                 {
                     return NotFound();
                 }
@@ -84,45 +81,45 @@ namespace RestaurantSchoolProject.Controllers
             return NoContent();
         }
 
-        // POST: api/Kuchyns
+        // POST: api/ObjDetails
         [HttpPost]
-        public async Task<IActionResult> PostKuchyn([FromBody] Kuchyn kuchyn)
+        public async Task<IActionResult> PostObjDetail([FromBody] ObjDetail objDetail)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Kuchyn.Add(kuchyn);
+            _context.ObjDetail.Add(objDetail);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetKuchyn", new { id = kuchyn.InternalId }, kuchyn);
+            return CreatedAtAction("GetObjDetail", new { id = objDetail.InternalId }, objDetail);
         }
 
-        // DELETE: api/Kuchyns/5
+        // DELETE: api/ObjDetails/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteKuchyn([FromRoute] int id)
+        public async Task<IActionResult> DeleteObjDetail([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var kuchyn = await _context.Kuchyn.FindAsync(id);
-            if (kuchyn == null)
+            var objDetail = await _context.ObjDetail.FindAsync(id);
+            if (objDetail == null)
             {
                 return NotFound();
             }
 
-            _context.Kuchyn.Remove(kuchyn);
+            _context.ObjDetail.Remove(objDetail);
             await _context.SaveChangesAsync();
 
-            return Ok(kuchyn);
+            return Ok(objDetail);
         }
 
-        private bool KuchynExists(int id)
+        private bool ObjDetailExists(int id)
         {
-            return _context.Kuchyn.Any(e => e.InternalId == id);
+            return _context.ObjDetail.Any(e => e.InternalId == id);
         }
     }
 }

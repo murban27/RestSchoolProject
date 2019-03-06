@@ -24,32 +24,32 @@ namespace DesktopRestaurant.Client
          * Auth method for Restaurant
          *---------------------------------------------------------*/
 
-        public InicializaceClient(string User_Name, string Heslo_Value)
+        public InicializaceClient()
         {
 
-            UserName = User_Name;
-            Heslo = Heslo_Value;
+            Client = new HttpClient();
             SetProperties();
 
-
         }
-        public InicializaceClient() { }
+
         public static string UserName
         {
             get { return login; }
             set { login = value; }
 
         }
-        public static string Heslo { get { return heslo; } set { login = value; } }
+        public static string Heslo { get { return heslo; } set { heslo = value; } }
         /// <summary>
         /// SetBasicAuthorazionValues
         /// </summary>
         public void SetProperties()
         {
 
-
-            var AuthValue = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes(UserName +":"+Heslo)));
+          
+            var AuthValue = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes("murban27" +":"+"Tesco123")));
             this.Client = new HttpClient() { DefaultRequestHeaders = { Authorization = AuthValue }, BaseAddress = new Uri("http://localhost:49861") };
+            Client.DefaultRequestHeaders.Accept.Add(
+     new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
 

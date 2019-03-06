@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesktopRestaurant.Controller
+namespace DesktopRestaurant.Client
 {
-    class GetMethod
+    class Login
     {
-       public string GetTables => "/api/Tables";
-        
-
     }
 }
-

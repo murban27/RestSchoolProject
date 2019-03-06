@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesktopRestaurant.Client
+namespace DesktopRestaurant.OBJECTS
 {
-    class Values
+    public class DenZakObjednavka
     {
-        public Values()
-        { }
+        public int Id { get; set; }
+
     }
 }

@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesktopRestaurant.Controller
+namespace DesktopRestaurant.Client
 {
-    class GetMethod
+    class DenZakObj
     {
-       public string GetTables => "/api/Tables";
-        
-
+        public DenZakObj()
+        { }
     }
 }
-
